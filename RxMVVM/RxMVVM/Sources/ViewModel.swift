@@ -8,27 +8,31 @@
 
 import Foundation
 import RxSwift
-import RxCocoa
-
 
 class ViewModel {
     var models = Variable<[Model]>([])
+    var showActivityIndicator = Variable<Bool>(false)
+    
     let disposeBag = DisposeBag()
     
-    func loadModels(){
+    func loadModels() {
+        showActivityIndicator.value = true
         Service.fetchModels()
             .subscribe(onSuccess: { fetchData in
                 self.models.value = fetchData
+                self.showActivityIndicator.value = false
             })
             .disposed(by: disposeBag)
     }
     
-    func addCell(){
-        let model = Model(text: "Generic Model", title: "Model-X:")
+    func addCell() {
+        var model = Model(id: 0)
+        model.text = "Generic Model"
+        model.title = "Model-X:"
         models.value.append(model)
     }
     
-    func removeCell(){
+    func removeCell() {
         if models.value.count >= 1{
             models.value.removeLast()
         }
