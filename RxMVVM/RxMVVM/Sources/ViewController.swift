@@ -28,17 +28,19 @@ class ViewController: UIViewController {
     
     func bindUI(){
         //Bind label
-        viewModel.models.asObservable().bind { models in
+        viewModel.models.asDriver()
+            .drive(onNext: { models in
             self.titleLabel.text = "\(models.count)"
-        }
-        .disposed(by: disposeBag)
+        })
+            .disposed(by: disposeBag)
         
         //Bind Tableview Datasource
-        viewModel.models.asObservable().bind(to: tableView.rx
+        viewModel.models.asDriver()
+            .drive(tableView.rx
             .items(cellIdentifier: "TableCell", cellType: TableCell.self)){
                 row, model, cell in
                 cell.model = model
-            }
+        }
             .disposed(by: disposeBag)
     }
 
