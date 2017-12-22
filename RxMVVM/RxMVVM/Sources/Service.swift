@@ -30,8 +30,7 @@ class Service {
                 }
                 
                 single(.success(models))
-                return
-                }
+            }
             return Disposables.create { }
         }
     }
